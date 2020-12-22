@@ -1,0 +1,7 @@
+{
+  "name": "CasaLamatApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
