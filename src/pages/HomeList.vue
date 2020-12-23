@@ -35,6 +35,9 @@ import add from "ionicons"
 
 export default {
     components: {
+        BaseLayout,
+
+        
         IonList,
         IonItem,
         IonFab,
