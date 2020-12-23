@@ -44,10 +44,22 @@
         <br>
         <!-- <pre>{{ protocol }}</pre> -->
 
+
         <ion-button color="light" expand="full" @click="undoneAllBeliefs">
             <ion-icon src="/assets/refresh.svg" />
             Regrabar creencias
         </ion-button>
+        <br>
+        
+        <ion-button color="warning" expand="full" @click="showRenameAlert">
+            Cambiar nombre
+        </ion-button>
+        <br>
+
+        <ion-button color="danger" expand="full" @click="showDeleteAlert">
+            Eliminar protocolo
+        </ion-button>
+
 
         <!-- <ion-button color="success" expand="full" @click="saveProtocol">Save</ion-button> -->
 
@@ -69,6 +81,7 @@ import {
     IonLabel,
     IonInput,
     IonTextarea,
+    alertController,
 } from "@ionic/vue"
 
 export default {
@@ -133,6 +146,88 @@ export default {
             }
         },
 
+
+        async showRenameAlert() {
+            const alert = await alertController
+                .create({
+                    header: 'Cambiar nombre',
+                    //message: 'Message <strong>text</strong>!!!',
+                    inputs: [
+                        {
+                            name: "protocolName",
+                            value: this.protocol.name,
+                        },
+                    ],
+                    buttons: [
+                        {
+                            text: 'Cancelar',
+                            role: 'cancel',
+                            cssClass: 'secondary',
+                        },
+                        {
+                            text: 'Ok',
+                            handler: (alertData) => {
+                                this.protocol.name = alertData.protocolName
+                                this.saveProtocol()
+                            },
+                        },
+                    ],
+                });
+            return alert.present();
+        },
+
+
+        async showDeleteAlert() {
+            const alert = await alertController
+                .create({
+                    header: 'Estas seguro?',
+                    message: 'Esta accion no se puede deshacer, por favor escribe <strong>CONFIRMAR</strong>, en el campo de abajo.',
+                    inputs: [
+                        {
+                            name: "confirmField",
+                            placeholder: "CONFIRMAR",
+                        },
+                    ],
+                    buttons: [
+                        {
+                            text: 'Cancelar',
+                            role: 'cancel',
+                            cssClass: 'secondary',
+                        },
+                        {
+                            text: 'Ok',
+                            handler: (alertData) => {
+                                if (alertData.confirmField.toLowerCase() == "confirmar") {
+                                    this.deleteProtocol()
+                                }
+                            },
+                        },
+                    ],
+                });
+            return alert.present();
+        },
+
+
+        async deleteProtocol() {
+            const {value} = await Storage.get({key: "protocols"})
+            if (value == null) return
+            
+            
+            let protocols = JSON.parse(value)
+            
+            let protocolItem = protocols.find((p) => p.id == this.protocolId)
+            let protocolIndex = protocols.indexOf(protocolItem)
+            
+            if (protocolIndex != -1) {
+                protocols.splice(protocolIndex, 1)
+                Storage.set({ key: "protocols", value: JSON.stringify(protocols) })
+                .then(() => {
+                    this.$router.replace('/');
+                })
+            }
+        },
+
+
         async saveProtocol() {
             const {value} = await Storage.get({key: "protocols"})
             if (value == null) return
@@ -174,10 +269,12 @@ export default {
             
             this.saveProtocol()
         },
+
         deleteBelief(belief) {
             this.protocol.beliefs.splice(this.protocol.beliefs.indexOf(belief), 1)
             this.saveProtocol()
         },
+
         undoneAllBeliefs() {
             this.protocol.beliefs.forEach((belief) => {
                 belief.done = false

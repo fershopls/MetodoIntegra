@@ -65,7 +65,6 @@ export default {
 
         timeToDateText(time){
             let date = new Date(time)
-            console.log({time})
             let months = [
                 "Ene",
                 "Feb",
