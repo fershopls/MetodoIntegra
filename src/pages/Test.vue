@@ -41,7 +41,11 @@ export default {
             Storage.set({ key: "item", value: this.item })
         },
         remove() {
-            Storage.remove({ key: "item" })
+            Storage.keys().then((result) => {
+                result.keys.forEach(element => {
+                    Storage.remove({ key: element })
+                });
+            })
         },
         load(){
             this.getItem();
