@@ -52,6 +52,9 @@ export default {
     mounted(){
         this.getAllProtocols()
     },
+    updated(){
+        this.getAllProtocols()
+    },
     methods: {
         async getAllProtocols() {
             const {value} = await Storage.get({key: "protocols"})

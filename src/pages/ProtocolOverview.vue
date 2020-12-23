@@ -1,5 +1,5 @@
 <template>
-    <base-layout :pageTitle="loadedProtocol.name">
+    <base-layout :pageTitle="protocol.name">
 
         <ion-item>
             <ion-textarea placeholder="Describe tu objetivo aquí..."></ion-textarea>
@@ -31,7 +31,8 @@
 
         
         <ion-list>
-            <ion-item v-for="(belief, index) in loadedProtocol.beliefs.slice().reverse()" v-bind:key="belief" lines="full">
+            <!-- .slice().reverse() -->
+            <ion-item v-for="(belief, index) in protocol.beliefs" v-bind:key="belief" lines="full">
                 <ion-checkbox slot="start" v-model="belief.done"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief.text }}</ion-label>
                 <ion-button fill="clear" @click="deleteBelief(belief)">
@@ -54,6 +55,10 @@
 </template>
 
 <script>
+import { Plugins } from "@capacitor/core";
+const { Storage } = Plugins
+
+
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
 import {
     IonButton,
@@ -79,10 +84,16 @@ export default {
         IonTextarea,
     },
 
+    mounted() {
+        this.loadProtocolById()
+    },
+
     data() {
         return {
             protocolId: this.$route.params.id,
             beliefText: "",
+
+            protocol: {},
 
             name: "Mi protocolo 1",
             beliefs: [
@@ -109,6 +120,19 @@ export default {
     },
 
     methods: {
+        async loadProtocolById(){
+            console.log("hello")
+            const {value} = await Storage.get({ key: "protocols" })
+            if (value == null) return;
+            let id = this.protocolId
+            let protocols = JSON.parse(value)
+            let protocol = protocols.find((protocol) => protocol.id == id)
+            console.log({id, protocol})
+            if (protocol) {
+                this.protocol = protocol
+            }
+        },
+
         xd() {
             console.log(this.$store.getters.getProtocolById(this.protocolId))
         },
