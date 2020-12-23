@@ -31,7 +31,6 @@ import {
     IonLabel,
     IonNote,
 } from "@ionic/vue"
-import add from "ionicons"
 
 export default {
     components: {
@@ -47,23 +46,12 @@ export default {
         IonNote,
     },
     computed: {
-        protocol_list(){
-            return this.$store.getters.protocol_list
-        }
-    }
-    data(){
-        return {
-            list: [
-                {id: 1, name: "Mi protocolo 1", date: "Dic 28"},
-                {id: 2, name: "Mi proto 22222", date: "Dic 20"},
-            ]
+        list(){
+            return this.$store.getters.allProtocols
         }
     },
-    setup(){
-        return {
-            add
-        }
-    }
+    //{id: 1, name: "Mi protocolo 1", date: "Dic 28"},
+    //{id: 2, name: "Mi proto 22222", date: "Dic 20"},
     
 }
 </script>
