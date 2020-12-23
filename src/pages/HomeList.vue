@@ -5,14 +5,14 @@
         <ion-list>
             <ion-item v-for="protocol in list" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
                 <ion-label>{{ protocol.name }}</ion-label>
-                <ion-note slot="end">{{ protocol.date }}</ion-note>
+                <!-- <ion-note slot="end">{{ protocol.date }}</ion-note> -->
             </ion-item>
         </ion-list>
 
         
         <!-- fab placed to the (vertical) center and end -->
         <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-            <ion-fab-button>
+            <ion-fab-button router-link="/create">
                 <ion-icon src="/assets/add.svg" />
             </ion-fab-button>
         </ion-fab>
@@ -29,7 +29,7 @@ import {
     IonFabButton,
     IonIcon,
     IonLabel,
-    IonNote,
+    // IonNote,
 } from "@ionic/vue"
 
 export default {
@@ -43,7 +43,7 @@ export default {
         IonFabButton,
         IonIcon,
         IonLabel,
-        IonNote,
+        // IonNote,
     },
     computed: {
         list(){
