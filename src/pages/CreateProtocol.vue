@@ -66,6 +66,8 @@ export default {
                 id: new Date().getTime(),
                 name: protocolName,
                 beliefs: [],
+                description: "",
+                factors: [],
             }
         },
         async getAllProtocols() {

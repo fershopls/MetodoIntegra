@@ -2,16 +2,16 @@
     <base-layout :pageTitle="protocol.name">
 
         <ion-item>
-            <ion-textarea placeholder="Describe tu objetivo aquí..."></ion-textarea>
+            <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="saveProtocol"></ion-textarea>
         </ion-item>
         
 
         <h2 style="text-align: center">Elementos Energéticos</h2>
         
         <ion-list>
-            <ion-item v-for="factor in factors" v-bind:key="factor.name" lines="full">
-                <ion-label class="ion-text-wrap">{{ factor.name }}</ion-label>
-                <ion-checkbox slot="end" v-model="factor.done"/>
+            <ion-item v-for="(factor, index) in factors" v-bind:key="factor" lines="full">
+                <ion-label class="ion-text-wrap">{{ factor }}</ion-label>
+                <ion-checkbox slot="end" @ionChange="onFactorChanged($event, index)" v-bind:checked="isFactorDone(index)"/>
             </ion-item>
         </ion-list>
         
@@ -31,8 +31,7 @@
 
         
         <ion-list>
-            <!-- .slice().reverse() -->
-            <ion-item v-for="(belief, index) in protocol.beliefs" v-bind:key="belief" lines="full">
+            <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="belief" lines="full">
                 <ion-checkbox slot="start" v-model="belief.done"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief.text }}</ion-label>
                 <ion-button fill="clear" @click="deleteBelief(belief)">
@@ -43,12 +42,14 @@
         
 
         <br>
-        
+        <!-- <pre>{{ protocol }}</pre> -->
 
         <ion-button color="light" expand="full" @click="undoneAllBeliefs">
             <ion-icon src="/assets/refresh.svg" />
             Regrabar creencias
         </ion-button>
+
+        <!-- <ion-button color="success" expand="full" @click="saveProtocol">Save</ion-button> -->
 
 
     </base-layout>
@@ -86,6 +87,11 @@ export default {
 
     mounted() {
         this.loadProtocolById()
+        // this.interval = setInterval(this.saveProtocol, 1000)
+    },
+
+    unmounted() {
+        this.saveProtocol()
     },
 
     data() {
@@ -93,63 +99,87 @@ export default {
             protocolId: this.$route.params.id,
             beliefText: "",
 
-            protocol: {},
+            protocol: {
+                description: "",
+                beliefs: [],
+                factors: [],
+            },
 
-            name: "Mi protocolo 1",
-            beliefs: [
-                {text: "Merezco ser increible", done: true},
-                {text: "Soy capaz de lograr todo lo que me propongo", done: false},
-            ],
             factors: [
-                {name: "Energías Negativas Externas+", done: true},
-                {name: "Acuerdos Karmicos", done: false},
-                {name: "Traumas", done: true},
-                {name: "Lealtades", done: true},
-                {name: "Bloqueos emocionales", done: true},
-                {name: "Bloqueos espirituales", done: false},
+                "Energías Negativas Externas+",
+                "Acuerdos Karmicos",
+                "Traumas",
+                "Lealtades",
+                "Bloqueos emocionales",
+                "Bloqueos espirituales",
             ],
         }
     
     },
 
 
-    computed: {
-        loadedProtocol() {
-            return this.$store.getters.getProtocolById(this.protocolId);
-        },
-    },
-
     methods: {
         async loadProtocolById(){
-            console.log("hello")
             const {value} = await Storage.get({ key: "protocols" })
+            
             if (value == null) return;
             let id = this.protocolId
             let protocols = JSON.parse(value)
             let protocol = protocols.find((protocol) => protocol.id == id)
-            console.log({id, protocol})
+            // console.log({id, protocol})
             if (protocol) {
                 this.protocol = protocol
+                this.elements = protocol.elements
             }
         },
 
-        xd() {
-            console.log(this.$store.getters.getProtocolById(this.protocolId))
+        async saveProtocol() {
+            const {value} = await Storage.get({key: "protocols"})
+            if (value == null) return
+            
+            
+            let protocols = JSON.parse(value)
+            
+            let protocolItem = protocols.find((p) => p.id == this.protocolId)
+            let protocolIndex = protocols.indexOf(protocolItem)
+            
+            if (protocolIndex != -1) {
+                protocols[protocolIndex] = this.protocol
+                Storage.set({ key: "protocols", value: JSON.stringify(protocols) })
+            }
+        },
+
+        isFactorDone(index) {
+            return this.protocol.factors.indexOf(index) != -1
+        },
+        
+        onFactorChanged(e, index) {
+            // console.log({ e, index, check: e.target.checked })
+            if (e.target.checked == true)
+            {
+                this.protocol.factors.push(index)
+            } else {
+                this.protocol.factors.splice(this.protocol.factors.indexOf(index), 1)
+            }
+            this.saveProtocol()
         },
 
         addBelief() {
             if (this.beliefText == "") return;
-            this.beliefs.push({
+            this.protocol.beliefs.push({
                 text: this.beliefText,
                 done: false,
             })
             this.beliefText = ""
+            
+            this.saveProtocol()
         },
         deleteBelief(belief) {
-            this.beliefs.splice(this.beliefs.indexOf(belief), 1)
+            this.protocol.beliefs.splice(this.protocol.beliefs.indexOf(belief), 1)
+            this.saveProtocol()
         },
         undoneAllBeliefs() {
-            this.beliefs.forEach((belief) => {
+            this.protocol.beliefs.forEach((belief) => {
                 belief.done = false
             })
         }
