@@ -1,5 +1,5 @@
 <template>
-    <base-layout :pageTitle="name">
+    <base-layout :pageTitle="loadedProtocol.name">
 
         <ion-item>
             <ion-textarea placeholder="Describe tu objetivo aquí..."></ion-textarea>
@@ -31,7 +31,7 @@
 
         
         <ion-list>
-            <ion-item v-for="(belief, index) in beliefs.slice().reverse()" v-bind:key="belief" lines="full">
+            <ion-item v-for="(belief, index) in loadedProtocol.beliefs.slice().reverse()" v-bind:key="belief" lines="full">
                 <ion-checkbox slot="start" v-model="belief.done"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief.text }}</ion-label>
                 <ion-button fill="clear" @click="deleteBelief(belief)">
@@ -41,7 +41,6 @@
         </ion-list>
         
 
-        {{ belief_text }}
         <br>
         
 
@@ -82,6 +81,7 @@ export default {
 
     data() {
         return {
+            protocolId: this.$route.params.id,
             beliefText: "",
 
             name: "Mi protocolo 1",
@@ -98,10 +98,21 @@ export default {
                 {name: "Bloqueos espirituales", done: false},
             ],
         }
+    
+    },
 
+
+    computed: {
+        loadedProtocol() {
+            return this.$store.getters.getProtocolById(this.protocolId);
+        },
     },
 
     methods: {
+        xd() {
+            console.log(this.$store.getters.getProtocolById(this.protocolId))
+        },
+
         addBelief() {
             if (this.beliefText == "") return;
             this.beliefs.push({
