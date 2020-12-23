@@ -13,7 +13,11 @@ const routes = [
   {
     path: '/create',
     component: () => import("@/pages/CreateProtocol.vue")
-  }
+  },
+  {
+    path: '/test',
+    component: () => import("@/pages/Test.vue")
+  },
 ]
 
 const router = createRouter({
