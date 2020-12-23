@@ -51,6 +51,11 @@
         </ion-button>
         <br>
         
+        <ion-button color="warning" expand="full" @click="showExportAlert">
+            Exportar Protocolo
+        </ion-button>
+        <br>
+        
         <ion-button color="warning" expand="full" @click="showRenameAlert">
             Cambiar nombre
         </ion-button>
@@ -119,12 +124,16 @@ export default {
             },
 
             factors: [
-                "Energías Negativas Externas+",
+                "Portales Multidimensionales",
+                "Espíritus",
+                "Energías Negativas Externas",
+                "Pactos Secretos",
                 "Acuerdos Karmicos",
                 "Traumas",
                 "Lealtades",
                 "Bloqueos emocionales",
                 "Bloqueos espirituales",
+                "Escudos de Protección",
             ],
         }
     
@@ -201,6 +210,36 @@ export default {
                                     this.deleteProtocol()
                                 }
                             },
+                        },
+                    ],
+                });
+            return alert.present();
+        },
+
+
+        async showExportAlert() {
+            let protocolExported = ""
+            let protocol = this.protocol
+            protocolExported += protocol.name + "\n\n"
+            protocolExported += "=====\n"+protocol.description + "\n=====\n\n"
+            protocol.beliefs.forEach((b, i) => {
+                protocolExported += (i+1) + ". " +b.text+"\n"
+            })
+
+            const alert = await alertController
+                .create({
+                    header: 'Exportar protocolo',
+                    inputs: [
+                        {
+                            name: "confirmField",
+                            type: "textarea",
+                            value: protocolExported,
+                            rows: 10,
+                        },
+                    ],
+                    buttons: [
+                        {
+                            text: 'Ok'
                         },
                     ],
                 });
