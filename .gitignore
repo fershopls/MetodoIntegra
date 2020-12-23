@@ -14,6 +14,7 @@ UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
 
 *.log
+/public/assets/*
 log.txt
 npm-debug.log*
 
