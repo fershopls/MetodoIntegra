@@ -3,7 +3,7 @@
         
         
         <ion-list>
-            <ion-item v-for="protocol in list" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
+            <ion-item v-for="protocol in protocols" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
                 <ion-label>{{ protocol.name }}</ion-label>
                 <!-- <ion-note slot="end">{{ protocol.date }}</ion-note> -->
             </ion-item>
@@ -21,7 +21,11 @@
 </template>
 
 <script>
+import { Plugins } from "@capacitor/core";
+const { Storage } = Plugins
+
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
+
 import {
     IonList,
     IonItem,
@@ -45,13 +49,22 @@ export default {
         IonLabel,
         // IonNote,
     },
-    computed: {
-        list(){
-            return this.$store.getters.allProtocols
+    mounted(){
+        this.getAllProtocols()
+    },
+    methods: {
+        async getAllProtocols() {
+            const {value} = await Storage.get({key: "protocols"})
+            if (value != null) {
+                this.protocols = JSON.parse(value)
+            }
         }
     },
-    //{id: 1, name: "Mi protocolo 1", date: "Dic 28"},
-    //{id: 2, name: "Mi proto 22222", date: "Dic 20"},
+    data() {
+        return {
+            protocols: [],
+        }
+    },
     
 }
 </script>

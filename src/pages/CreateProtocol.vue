@@ -17,6 +17,10 @@
 </template>
 
 <script>
+import { Plugins } from "@capacitor/core";
+const { Storage } = Plugins
+
+
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
 import {
     IonItem,
@@ -38,15 +42,38 @@ export default {
     data(){
         return {
             protocolName: "",
+            protocols: [],
         }
+    },
+    mounted(){
+        this.getAllProtocols()
     },
     methods: {
         createProtocol() {
             if (this.protocolName == "") return;
+            this.protocols.push(this.createProtocolObject(this.protocolName))
             
-            this.$store.dispatch('createProtocol', {name: this.protocolName });
-            this.$router.replace('/');
+            Storage.set({
+                key: "protocols",
+                value: JSON.stringify(this.protocols)
+            }).then(() => {
+                this.$router.replace('/');
+            })
+
         },
+        createProtocolObject(protocolName) {
+            return {
+                id: new Date().getTime(),
+                name: protocolName,
+                beliefs: [],
+            }
+        },
+        async getAllProtocols() {
+            const {value} = await Storage.get({key: "protocols"})
+            if (value != null) {
+                this.protocols = JSON.parse(value)
+            }
+        }
     }
     
 }
