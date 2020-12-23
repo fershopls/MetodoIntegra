@@ -1,17 +1,20 @@
 <template>
-    <base-layout :pageTitle="protocol.name">
+    <base-layout :pageTitle="name">
+
+        <ion-item>
+            <ion-textarea placeholder="Describe tu objetivo aquí..."></ion-textarea>
+        </ion-item>
         
+
+        <h2 style="text-align: center">Elementos Energéticos</h2>
         
-        <ion-grid>
-            <ion-row v-for="factor in factors" v-bind:key="factor.name">
-                <ion-col size="10">
-                    {{ factor.name }}
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox color="primary" :checked="factor.done"></ion-checkbox>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+        <ion-list>
+            <ion-item v-for="factor in factors" v-bind:key="factor.name" lines="full">
+                <ion-label class="ion-text-wrap">{{ factor.name }}</ion-label>
+                <ion-checkbox slot="end" v-model="factor.done"/>
+            </ion-item>
+        </ion-list>
+        
 
 
         <h2 style="text-align: center">Lista de Creencias</h2>
@@ -19,26 +22,30 @@
 
         <ion-item>
             <ion-label position="floating">Escribe tu nueva creencia..</ion-label>
-            <ion-input></ion-input>
+            <ion-input v-model="beliefText" @keyup.enter="addBelief"></ion-input>
         </ion-item>
         
-        <ion-button color="primary" expand="full">
+        <ion-button color="primary" expand="full" @click="addBelief">
             Añadir
         </ion-button>
 
         
         <ion-list>
-            <ion-item v-for="belief in beliefs" v-bind:key="belief.id" lines="full">
-                <ion-checkbox slot="start" />
-                <ion-label class="ion-text-wrap">{{ belief.text }}</ion-label>
-                <ion-button fill="clear">
+            <ion-item v-for="(belief, index) in beliefs.slice().reverse()" v-bind:key="belief" lines="full">
+                <ion-checkbox slot="start" v-model="belief.done"/>
+                <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief.text }}</ion-label>
+                <ion-button fill="clear" @click="deleteBelief(belief)">
                     <ion-icon src="/assets/trash.svg" />
                 </ion-button>
             </ion-item>
         </ion-list>
         
+
+        {{ belief_text }}
+        <br>
         
-        <ion-button color="light" slot="center">
+
+        <ion-button color="light" expand="full" @click="undoneAllBeliefs">
             <ion-icon src="/assets/refresh.svg" />
             Regrabar creencias
         </ion-button>
@@ -51,14 +58,12 @@
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
 import {
     IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonCheckbox,
     IonList,
     IonItem,
     IonLabel,
     IonInput,
+    IonTextarea,
 } from "@ionic/vue"
 
 export default {
@@ -67,21 +72,23 @@ export default {
 
 
         IonButton,
-        IonGrid,
         IonList,
-        IonRow,
-        IonCol,
         IonCheckbox,
         IonItem,
         IonLabel,
         IonInput,
+        IonTextarea,
     },
 
     data() {
         return {
-            protocol: {
-                name: "Mi protocolo 1"
-            },
+            beliefText: "",
+
+            name: "Mi protocolo 1",
+            beliefs: [
+                {text: "Merezco ser increible", done: true},
+                {text: "Soy capaz de lograr todo lo que me propongo", done: false},
+            ],
             factors: [
                 {name: "Energías Negativas Externas+", done: true},
                 {name: "Acuerdos Karmicos", done: false},
@@ -90,10 +97,26 @@ export default {
                 {name: "Bloqueos emocionales", done: true},
                 {name: "Bloqueos espirituales", done: false},
             ],
-            beliefs: [
-                {id: 1, text: "Merezco ser increible", done: true},
-                {id: 2, text: "Soy capaz de lograr todo lo que me propongo", done: false},
-            ],
+        }
+
+    },
+
+    methods: {
+        addBelief() {
+            if (this.beliefText == "") return;
+            this.beliefs.push({
+                text: this.beliefText,
+                done: false,
+            })
+            this.beliefText = ""
+        },
+        deleteBelief(belief) {
+            this.beliefs.splice(this.beliefs.indexOf(belief), 1)
+        },
+        undoneAllBeliefs() {
+            this.beliefs.forEach((belief) => {
+                belief.done = false
+            })
         }
     }
     
