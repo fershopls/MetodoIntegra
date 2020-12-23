@@ -37,7 +37,7 @@ export default {
     components: {
         BaseLayout,
 
-        
+
         IonList,
         IonItem,
         IonFab,
@@ -46,6 +46,11 @@ export default {
         IonLabel,
         IonNote,
     },
+    computed: {
+        protocol_list(){
+            return this.$store.getters.protocol_list
+        }
+    }
     data(){
         return {
             list: [
