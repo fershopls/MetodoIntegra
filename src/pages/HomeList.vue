@@ -3,9 +3,9 @@
         
         
         <ion-list>
-            <ion-item v-for="protocol in protocols" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
+            <ion-item v-for="protocol in protocols.slice().reverse()" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
                 <ion-label>{{ protocol.name }}</ion-label>
-                <!-- <ion-note slot="end">{{ protocol.date }}</ion-note> -->
+                <ion-note slot="end">{{ timeToDateText(protocol.id) }}</ion-note>
             </ion-item>
         </ion-list>
 
@@ -33,7 +33,7 @@ import {
     IonFabButton,
     IonIcon,
     IonLabel,
-    // IonNote,
+    IonNote,
 } from "@ionic/vue"
 
 export default {
@@ -47,7 +47,7 @@ export default {
         IonFabButton,
         IonIcon,
         IonLabel,
-        // IonNote,
+        IonNote,
     },
     mounted(){
         this.getAllProtocols()
@@ -61,6 +61,29 @@ export default {
             if (value != null) {
                 this.protocols = JSON.parse(value)
             }
+        },
+
+        timeToDateText(time){
+            let date = new Date(time)
+            console.log({time})
+            let months = [
+                "Ene",
+                "Feb",
+                "Mar",
+                "Abr",
+                "May",
+                "Jun",
+                "Jul",
+                "Ago",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dic",
+            ]
+            let day = date.getDay()
+            day = day < 10? "0"+day:day
+            let year = date.getFullYear()
+            return months[date.getMonth() - 1] + " " + day + " " + year
         }
     },
     data() {
