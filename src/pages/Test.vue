@@ -2,6 +2,8 @@
     
     <h2>data: {{ item }}</h2>
 
+    {{ all_protocols }}
+
     <ion-input @keyup.enter="save" v-model="item" />
 
     <ion-button @click="save">Save</ion-button>
@@ -24,9 +26,14 @@ export default {
     },
     mounted(){
         this.getItem()
+        
+        this.$storage.getAllProtocols().then((protocols) => {
+            console.log({protocols})
+        })
     },
     data() {
         return {
+            all_protocols: {},
             item: "",
         }
     },

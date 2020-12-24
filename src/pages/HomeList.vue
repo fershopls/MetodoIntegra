@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import { Plugins } from "@capacitor/core";
-const { Storage } = Plugins
 
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
 
@@ -50,17 +48,17 @@ export default {
         IonNote,
     },
     mounted(){
-        this.getAllProtocols()
+        this.retriveAllProtocols()
     },
     updated(){
-        this.getAllProtocols()
+        this.retriveAllProtocols()
     },
     methods: {
-        async getAllProtocols() {
-            const {value} = await Storage.get({key: "protocols"})
-            if (value != null) {
-                this.protocols = JSON.parse(value)
-            }
+        async retriveAllProtocols() {
+            this.protocols = await this.$storage.getAllProtocols()
+            // .then((result) => {
+            //     this.protocols = result
+            // })
         },
 
         timeToDateText(time){
