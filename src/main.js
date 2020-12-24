@@ -6,7 +6,7 @@ import router from './router';
 import { IonicVue } from '@ionic/vue';
 
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
-import store from "@/store";
+import storage from "@/storage"
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -33,7 +33,7 @@ import './theme/variables.css';
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(store);
+  .use(storage);
 
   app.component("base-layout", BaseLayout)
   
