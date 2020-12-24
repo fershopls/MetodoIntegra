@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "CasaLamatApp",
+  "appId": "com.fershopls.protocolos",
+  "appName": "Protocolos",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
