@@ -104,8 +104,11 @@ export default {
     },
 
     mounted() {
-        this.loadProtocolById()
-        // this.interval = setInterval(this.saveProtocol, 1000)
+        this.$storage.loadProtocolById(this.protocolId).then((result) => {
+            if (result) {
+                this.protocol = result
+            }
+        })
     },
 
     unmounted() {
@@ -141,19 +144,6 @@ export default {
 
 
     methods: {
-        async loadProtocolById(){
-            const {value} = await Storage.get({ key: "protocols" })
-            
-            if (value == null) return;
-            let id = this.protocolId
-            let protocols = JSON.parse(value)
-            let protocol = protocols.find((protocol) => protocol.id == id)
-            // console.log({id, protocol})
-            if (protocol) {
-                this.protocol = protocol
-                this.elements = protocol.elements
-            }
-        },
 
 
         async showRenameAlert() {
@@ -288,13 +278,13 @@ export default {
         },
         
         onFactorChanged(e, index) {
-            // console.log({ e, index, check: e.target.checked })
             if (e.target.checked == true)
             {
                 this.protocol.factors.push(index)
             } else {
                 this.protocol.factors.splice(this.protocol.factors.indexOf(index), 1)
             }
+            console.log(this.protocol.factors)
             this.saveProtocol()
         },
 
