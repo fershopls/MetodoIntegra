@@ -104,9 +104,13 @@ export default {
     },
 
     mounted() {
-        this.$storage.loadProtocolById(this.protocolId).then((result) => {
+        this.$storage.getProtocolById(this.protocolId).then((result) => {
             if (result) {
                 this.protocol = result
+                if (this.protocol.factors.length > this.factors.length)
+                {
+                    this.protocol.factors = {}
+                }
             }
         })
     },
@@ -274,15 +278,15 @@ export default {
         },
 
         isFactorDone(index) {
-            return this.protocol.factors.indexOf(index) != -1
+            return Object.prototype.hasOwnProperty.call(this.protocol.factors, index) && this.protocol.factors[index] == 1
         },
         
         onFactorChanged(e, index) {
             if (e.target.checked == true)
             {
-                this.protocol.factors.push(index)
+                this.protocol.factors[index] = 1
             } else {
-                this.protocol.factors.splice(this.protocol.factors.indexOf(index), 1)
+                this.protocol.factors[index] = 0
             }
             console.log(this.protocol.factors)
             this.saveProtocol()
