@@ -2,7 +2,7 @@
     <base-layout :pageTitle="protocol.name">
 
         <ion-item>
-            <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="saveProtocol"></ion-textarea>
+            <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="save"></ion-textarea>
         </ion-item>
         
 
@@ -66,18 +66,15 @@
         </ion-button>
 
 
-        <!-- <ion-button color="success" expand="full" @click="saveProtocol">Save</ion-button> -->
+        <!-- <ion-button color="success" expand="full" @click="save">Save</ion-button> -->
 
 
     </base-layout>
 </template>
 
 <script>
-import { Plugins } from "@capacitor/core";
-const { Storage } = Plugins
-
-
 import BaseLayout from "@/components/Layout/BaseLayout.vue"
+
 import {
     IonButton,
     IonCheckbox,
@@ -116,7 +113,7 @@ export default {
     },
 
     unmounted() {
-        this.saveProtocol()
+        this.save()
     },
 
     data() {
@@ -171,7 +168,7 @@ export default {
                             text: 'Ok',
                             handler: (alertData) => {
                                 this.protocol.name = alertData.protocolName
-                                this.saveProtocol()
+                                this.save()
                             },
                         },
                     ],
@@ -201,7 +198,9 @@ export default {
                             text: 'Ok',
                             handler: (alertData) => {
                                 if (alertData.confirmField.toLowerCase() == "confirmar") {
-                                    this.deleteProtocol()
+                                    this.$storage.deleteProtocol(this.protocolId).then(() => {
+                                        this.$router.replace('/');
+                                    })
                                 }
                             },
                         },
@@ -240,43 +239,6 @@ export default {
             return alert.present();
         },
 
-
-        async deleteProtocol() {
-            const {value} = await Storage.get({key: "protocols"})
-            if (value == null) return
-            
-            
-            let protocols = JSON.parse(value)
-            
-            let protocolItem = protocols.find((p) => p.id == this.protocolId)
-            let protocolIndex = protocols.indexOf(protocolItem)
-            
-            if (protocolIndex != -1) {
-                protocols.splice(protocolIndex, 1)
-                Storage.set({ key: "protocols", value: JSON.stringify(protocols) })
-                .then(() => {
-                    this.$router.replace('/');
-                })
-            }
-        },
-
-
-        async saveProtocol() {
-            const {value} = await Storage.get({key: "protocols"})
-            if (value == null) return
-            
-            
-            let protocols = JSON.parse(value)
-            
-            let protocolItem = protocols.find((p) => p.id == this.protocolId)
-            let protocolIndex = protocols.indexOf(protocolItem)
-            
-            if (protocolIndex != -1) {
-                protocols[protocolIndex] = this.protocol
-                Storage.set({ key: "protocols", value: JSON.stringify(protocols) })
-            }
-        },
-
         isFactorDone(index) {
             return Object.prototype.hasOwnProperty.call(this.protocol.factors, index) && this.protocol.factors[index] == 1
         },
@@ -288,8 +250,8 @@ export default {
             } else {
                 this.protocol.factors[index] = 0
             }
-            console.log(this.protocol.factors)
-            this.saveProtocol()
+            // console.log(this.protocol.factors)
+            this.save()
         },
 
         addBelief() {
@@ -300,19 +262,23 @@ export default {
             })
             this.beliefText = ""
             
-            this.saveProtocol()
+            this.save()
         },
 
         deleteBelief(belief) {
             this.protocol.beliefs.splice(this.protocol.beliefs.indexOf(belief), 1)
-            this.saveProtocol()
+            this.save()
         },
 
         undoneAllBeliefs() {
             this.protocol.beliefs.forEach((belief) => {
                 belief.done = false
             })
-        }
+        },
+
+        save() {
+            this.$storage.saveProtocolById(this.protocolId, this.protocol)
+        },
     }
     
 }

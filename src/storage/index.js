@@ -26,6 +26,18 @@ export default {
                 return protocol
             },
 
+            async deleteProtocol(protocolId) {
+                const protocols = await this.getAllProtocols()
+                
+                let protocolItem = protocols.find((p) => p.id == protocolId)
+                let protocolIndex = protocols.indexOf(protocolItem)
+                
+                if (protocolIndex == -1) return;
+                
+                protocols.splice(protocolIndex, 1)
+                return this.saveProtocols(protocols)
+            },
+
 
             async create(protocolName) {
                 if (this.protocolName == "") return;
@@ -33,6 +45,19 @@ export default {
                 
                 let protocols = await this.getAllProtocols()
                 protocols.push(this._createProtocolObject(protocolName))
+
+                return this.saveProtocols(protocols)
+            },
+
+            async saveProtocolById(protocolId, protocolObject) {
+                const protocols = await this.getAllProtocols()
+                
+                let protocolItem = protocols.find((p) => p.id == protocolId)
+                let protocolIndex = protocols.indexOf(protocolItem)
+                
+                if (protocolIndex == -1) return;
+                
+                protocols[protocolIndex] = protocolObject
 
                 return this.saveProtocols(protocols)
             },
