@@ -1,8 +1,8 @@
 <template>
     <ion-page>
+        <welcome-screen />
         <ion-header>
             <ion-toolbar color="primary">
-                <ion-back-button slot="start" default-href="/"></ion-back-button>
                 <ion-title>{{ pageTitle }}</ion-title>
             </ion-toolbar>
         </ion-header>
@@ -14,24 +14,28 @@
 
 
 <script>
-import { 
+import WelcomeScreen from "@/components/WelcomeScreen.vue"
+
+import {
     IonPage,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
-    IonBackButton,
 } from "@ionic/vue";
+
 
 export default {
     props: ["pageTitle"],
     components: {
+        WelcomeScreen,
+
+
         IonPage,
         IonHeader,
         IonToolbar,
         IonTitle,
         IonContent,
-        IonBackButton,
     }
 }
 </script>

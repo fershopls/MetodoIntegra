@@ -1,7 +1,6 @@
 <template>
-    <base-layout pageTitle="Mis Protocolos">
-        
-        
+
+    <home-layout pageTitle="Mis Protocolos">
         <ion-list>
             <ion-item v-for="protocol in protocols.slice().reverse()" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
                 <ion-label>{{ protocol.name }}</ion-label>
@@ -17,12 +16,14 @@
             </ion-fab-button>
         </ion-fab>
 
-    </base-layout>
+    </home-layout>
 </template>
+
 
 <script>
 
-import BaseLayout from "@/components/Layout/BaseLayout.vue"
+import HomeLayout from "@/components/Layout/HomeLayout.vue"
+
 
 import {
     IonList,
@@ -36,7 +37,7 @@ import {
 
 export default {
     components: {
-        BaseLayout,
+        HomeLayout,
 
 
         IonList,

@@ -1,5 +1,5 @@
 <template>
-  <div id="screen" v-show="screen_visible">
+  <div id="welcome_screen" v-show="visible" ref="welcome_screen">
         <img src="/assets/logo.png" alt="" class="brand-img">
       
         <div class="brand-text">
@@ -11,13 +11,16 @@
 
 
 <style lang="stylus">
-
-#screen
-    width 100%
+#welcome_screen
+    position absolute
+    z-index 999999
+    top 0
+    bottom 0
+    left 0 
+    right 0
     margin auto
-    height 100%
     text-align center
-    position relative
+    background-color #fff
     .brand-img
         margin auto
         position absolute
@@ -47,17 +50,33 @@
 
 
 <script>
-//import {
-//} from "@ionic/vue"
+import {
+    createAnimation
+
+} from "@ionic/vue"
 
 
 export default {
 
     components: {
     },
+    mounted () {
+        document.onreadystatechange = () => { 
+            if (document.readyState == "complete") {
+                const animation = createAnimation()
+                .addElement(this.$refs.welcome_screen)
+                .duration(1350)
+                .fromTo('opacity', '1', '0');
+                animation.play().then(()=>{
+                    this.$refs.welcome_screen.style.display = "none"
+                })
+            } 
+        }
+    },
+
     data() {
         return {
-            screen_visible: true,
+            visible: true,
         }
     }
 

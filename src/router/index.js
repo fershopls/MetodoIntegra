@@ -16,7 +16,7 @@ const routes = [
   },
   {
     path: '/slides',
-    component: () => import("@/pages/WelcomeSlide.vue")
+    component: () => import("@/components/WelcomeScreen.vue")
   },
   {
     path: '/test',
