@@ -15,6 +15,10 @@ const routes = [
     component: () => import("@/pages/CreateProtocol.vue")
   },
   {
+    path: '/slides',
+    component: () => import("@/pages/WelcomeSlide.vue")
+  },
+  {
     path: '/test',
     component: () => import("@/pages/Test.vue")
   },
