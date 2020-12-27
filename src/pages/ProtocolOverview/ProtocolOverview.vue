@@ -8,7 +8,8 @@
         </template>
 
         <ion-item>
-            <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="save"></ion-textarea>
+            <ion-label position="floating">Objetivo:</ion-label>
+            <ion-textarea placeholder="¿Cuál es el objetivo?" v-model="protocol.description" auto-grow="true" @ionBlur="save"></ion-textarea>
         </ion-item>
         
 
@@ -55,26 +56,9 @@
             <ion-icon src="/assets/refresh.svg" />
             Regrabar creencias
         </ion-button>
-        <br>
-<!--         
-        <ion-button color="warning" expand="full" @click="showExportAlert">
-            Exportar Protocolo
-        </ion-button>
-        <br>
         
-        <ion-button color="warning" expand="full" @click="showRenameAlert">
-            Cambiar nombre
-        </ion-button>
-        <br>
 
-        <ion-button color="danger" expand="full" @click="showDeleteAlert">
-            Eliminar protocolo
-        </ion-button> -->
-
-
-        <!-- <ion-button color="success" expand="full" @click="save">Save</ion-button> -->
-
-        
+        <!-- Menu popover -->
         <ion-popover
             :is-open="isPopoverOpened"
             css-class="my-custom-class"
@@ -84,6 +68,15 @@
             <Popover v-on:item-clicked="onPopoverItemClicked"></Popover>
         </ion-popover>
 
+        <!-- Export modal -->
+        <ion-modal
+            :is-open="isExportModalOpened"
+            css-class="my-custom-class"
+            @onDidDismiss="isExportModalOpened = false"
+        >
+            <ExportTextModal v-on:dimiss="isExportModalOpened = false" :exported-string="exportedText" />
+        </ion-modal>
+
 
     </layout>
 </template>
@@ -91,6 +84,7 @@
 <script>
 import Layout from "@/pages/ProtocolOverview/Layout.vue"
 import Popover from "@/pages/ProtocolOverview/Popover"
+import ExportTextModal from "@/components/ExportTextModal/Modal"
 
 import { ellipsisVertical } from "ionicons/icons"
 
@@ -105,7 +99,8 @@ import {
     alertController,
     IonIcon,
 
-    IonPopover
+    IonModal,
+    IonPopover,
 } from "@ionic/vue"
 
 
@@ -113,6 +108,7 @@ export default {
     components: {
         Layout,
         Popover,
+        ExportTextModal,
 
 
         IonButton,
@@ -124,6 +120,7 @@ export default {
         IonTextarea,
         IonIcon,
 
+        IonModal,
         IonPopover,
     },
 
@@ -146,6 +143,10 @@ export default {
     data() {
         return {
             isPopoverOpened: false,
+            
+            isExportModalOpened: false,
+            exportedText: "",
+
             protocolId: this.$route.params.id,
             beliefText: "",
 
@@ -253,32 +254,23 @@ export default {
 
 
         async showExportAlert() {
-            let protocolExported = ""
             let protocol = this.protocol
-            protocolExported += protocol.name + "\n\n"
-            protocolExported += "=====\n"+protocol.description + "\n=====\n\n"
+            
+            let string = ""
+            // Add name
+            string += protocol.name + "\n\n"
+            // Add description
+            if (protocol.description != "")
+            {
+                string += "=====\n"+protocol.description + "\n=====\n\n"
+            }
+            // Add beliefs
             protocol.beliefs.forEach((b, i) => {
-                protocolExported += (i+1) + ". " +b.text+"\n"
+                string += (i+1) + ". " +b.text+"\n"
             })
 
-            const alert = await alertController
-                .create({
-                    header: 'Exportar protocolo',
-                    inputs: [
-                        {
-                            name: "confirmField",
-                            type: "textarea",
-                            value: protocolExported,
-                            rows: 10,
-                        },
-                    ],
-                    buttons: [
-                        {
-                            text: 'Ok'
-                        },
-                    ],
-                });
-            return alert.present();
+            this.exportedText = string
+            this.isExportModalOpened = true
         },
 
         isFactorDone(index) {
