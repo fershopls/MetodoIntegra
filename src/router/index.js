@@ -8,7 +8,7 @@ const routes = [
   },
   {
     path: '/protocol/:id',
-    component: () => import("@/pages/ProtocolOverview.vue")
+    component: () => import("@/pages/ProtocolOverview/ProtocolOverview.vue")
   },
   {
     path: '/create',

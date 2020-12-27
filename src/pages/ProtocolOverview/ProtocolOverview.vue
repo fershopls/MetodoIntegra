@@ -1,5 +1,5 @@
 <template>
-    <base-layout :pageTitle="protocol.name">
+    <layout :pageTitle="protocol.name">
 
         <ion-item>
             <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="save"></ion-textarea>
@@ -69,11 +69,11 @@
         <!-- <ion-button color="success" expand="full" @click="save">Save</ion-button> -->
 
 
-    </base-layout>
+    </layout>
 </template>
 
 <script>
-import BaseLayout from "@/components/Layout/BaseLayout.vue"
+import Layout from "@/pages/ProtocolOverview/Layout.vue"
 
 import {
     IonButton,
@@ -89,7 +89,7 @@ import {
 
 export default {
     components: {
-        BaseLayout,
+        Layout,
 
 
         IonButton,
