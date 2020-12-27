@@ -84,6 +84,7 @@ import {
     IonInput,
     IonTextarea,
     alertController,
+    IonIcon,
 } from "@ionic/vue"
 
 export default {
@@ -98,6 +99,7 @@ export default {
         IonLabel,
         IonInput,
         IonTextarea,
+        IonIcon,
     },
 
     mounted() {
