@@ -82,7 +82,7 @@
             css-class="my-custom-class"
             @onDidDismiss="isImportModalOpened = false"
         >
-            <ModalBeliefImports v-on:dimiss="isImportModalOpened = false" />
+            <ModalBeliefImports v-on:imported="importArrayOfBeliefs" v-on:dimiss="isImportModalOpened = false" />
         </ion-modal>
 
 
@@ -316,15 +316,29 @@ export default {
             this.save()
         },
 
-        addBelief() {
-            if (this.beliefText == "") return;
+        async importArrayOfBeliefs(beliefs) {
+            console.log("Importing ", beliefs)
+            beliefs.forEach((belief) => {
+                this.beliefText = belief
+                this.addBelief()
+            })
+        },
+
+        async addBeliefByString(beliefString) {
+            if (beliefString == "") return;
             this.protocol.beliefs.push({
-                text: this.beliefText,
+                text: beliefString,
                 done: false,
             })
-            this.beliefText = ""
-            
             this.save()
+        },
+
+        async addBelief() {
+            if (this.beliefText == "") return;
+
+            this.addBeliefByString(this.beliefText)
+            
+            this.beliefText = ""
         },
 
         deleteBelief(belief) {
