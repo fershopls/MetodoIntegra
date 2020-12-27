@@ -1,5 +1,11 @@
 <template>
-    <layout :pageTitle="protocol.name" :onSettingClicked="showPopover">
+    <layout :pageTitle="protocol.name">
+
+        <template v-slot:toolbar-buttons-end>
+            <ion-button @click="showPopover">
+                <ion-icon slot="icon-only" :icon="ellipsisVertical" />
+            </ion-button>
+        </template>
 
         <ion-item>
             <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="save"></ion-textarea>
@@ -85,6 +91,8 @@
 <script>
 import Layout from "@/pages/ProtocolOverview/Layout.vue"
 import Popover from "@/pages/ProtocolOverview/Popover"
+
+import { ellipsisVertical } from "ionicons/icons"
 
 import {
     IonButton,
@@ -315,6 +323,12 @@ export default {
         },
     },
 
-    
+
+    setup(){
+        return {
+            ellipsisVertical
+        }
+    },
+
 }
 </script>

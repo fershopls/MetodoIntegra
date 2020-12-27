@@ -5,15 +5,12 @@
                 <ion-back-button slot="start" default-href="/"></ion-back-button>
                 <ion-title>{{ pageTitle }}</ion-title>
                 <ion-buttons slot="end">
-                    <ion-button @click="onSettingClicked">
-                        <ion-icon slot="icon-only" src="/assets/ellipsis-vertical.svg" />
-                    </ion-button>
+                    <slot name="toolbar-buttons-end"/>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
 
         <ion-content>
-            {{ onSettingClicked }}
             <slot />
         </ion-content>
     </ion-page>
@@ -30,8 +27,8 @@ import {
     IonBackButton,
 
     IonButtons,
-    IonButton,
-    IonIcon
+    //IonButton,
+    //IonIcon
 } from "@ionic/vue";
 
 
@@ -47,8 +44,8 @@ export default {
         
 
         IonButtons,
-        IonButton,
-        IonIcon,
+        //IonButton,
+        //IonIcon,
     },
 }
 </script>
