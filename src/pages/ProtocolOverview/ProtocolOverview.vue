@@ -73,7 +73,16 @@
             css-class="my-custom-class"
             @onDidDismiss="isExportModalOpened = false"
         >
-            <ExportTextModal v-on:dimiss="isExportModalOpened = false" :exported-string="exportedText" />
+            <ModalExportText v-on:dimiss="isExportModalOpened = false" :exported-string="exportedText" />
+        </ion-modal>
+
+        <!-- Import modal beliefs -->
+        <ion-modal
+            :is-open="isImportModalOpened"
+            css-class="my-custom-class"
+            @onDidDismiss="isImportModalOpened = false"
+        >
+            <ModalBeliefImports v-on:dimiss="isImportModalOpened = false" />
         </ion-modal>
 
 
@@ -83,9 +92,12 @@
 <script>
 import Layout from "@/pages/ProtocolOverview/Layout.vue"
 import Popover from "@/pages/ProtocolOverview/Popover"
-import ExportTextModal from "@/components/ExportTextModal/Modal"
+import ModalExportText from "@/components/ExportTextModal/Modal"
+import ModalBeliefImports from "./ModalBeliefImports/Modal"
+
 
 import { ellipsisVertical } from "ionicons/icons"
+
 
 import {
     IonButton,
@@ -107,7 +119,8 @@ export default {
     components: {
         Layout,
         Popover,
-        ExportTextModal,
+        ModalExportText,
+        ModalBeliefImports,
 
 
         IonButton,
@@ -143,8 +156,11 @@ export default {
         return {
             isPopoverOpened: false,
             
+            isImportModalOpened: false,
+
             isExportModalOpened: false,
             exportedText: "",
+
 
             protocolId: this.$route.params.id,
             beliefText: "",
@@ -182,6 +198,8 @@ export default {
             this.isPopoverOpened = false
             if (itemKey == "export")
                 this.showExportModal();
+            else if (itemKey == "import")
+                this.showImportModal()
             else if (itemKey == "rename")
                 this.showRenameAlert();
             else if (itemKey == "delete")
@@ -214,6 +232,10 @@ export default {
 
             this.exportedText = string
             this.isExportModalOpened = true
+        },
+
+        async showImportModal() {
+            this.isImportModalOpened = true
         },
 
 
