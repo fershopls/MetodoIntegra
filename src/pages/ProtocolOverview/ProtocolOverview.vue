@@ -1,5 +1,5 @@
 <template>
-    <layout :pageTitle="protocol.name">
+    <layout :pageTitle="protocol.name" :onSettingClicked="showPopover">
 
         <ion-item>
             <ion-textarea placeholder="Describe tu objetivo aquí..." v-model="protocol.description" auto-grow="true" @ionBlur="save"></ion-textarea>
@@ -50,7 +50,7 @@
             Regrabar creencias
         </ion-button>
         <br>
-        
+<!--         
         <ion-button color="warning" expand="full" @click="showExportAlert">
             Exportar Protocolo
         </ion-button>
@@ -63,10 +63,20 @@
 
         <ion-button color="danger" expand="full" @click="showDeleteAlert">
             Eliminar protocolo
-        </ion-button>
+        </ion-button> -->
 
 
         <!-- <ion-button color="success" expand="full" @click="save">Save</ion-button> -->
+
+        
+        <ion-popover
+            :is-open="isPopoverOpened"
+            css-class="my-custom-class"
+            :translucent="true"
+            @onDidDismiss="isPopoverOpened = false"
+            >
+            <Popover v-on:item-clicked="onPopoverItemClicked"></Popover>
+        </ion-popover>
 
 
     </layout>
@@ -74,6 +84,7 @@
 
 <script>
 import Layout from "@/pages/ProtocolOverview/Layout.vue"
+import Popover from "@/pages/ProtocolOverview/Popover"
 
 import {
     IonButton,
@@ -85,11 +96,15 @@ import {
     IonTextarea,
     alertController,
     IonIcon,
+
+    IonPopover
 } from "@ionic/vue"
+
 
 export default {
     components: {
         Layout,
+        Popover,
 
 
         IonButton,
@@ -100,6 +115,8 @@ export default {
         IonInput,
         IonTextarea,
         IonIcon,
+
+        IonPopover,
     },
 
     mounted() {
@@ -120,6 +137,7 @@ export default {
 
     data() {
         return {
+            isPopoverOpened: false,
             protocolId: this.$route.params.id,
             beliefText: "",
 
@@ -147,6 +165,20 @@ export default {
 
 
     methods: {
+
+        showPopover(visible = true) {
+            this.isPopoverOpened = visible
+        },
+
+        onPopoverItemClicked(e, itemKey) {
+            this.isPopoverOpened = false
+            if (itemKey == "export")
+                this.showExportAlert();
+            else if (itemKey == "rename")
+                this.showRenameAlert();
+            else if (itemKey == "delete")
+                this.showDeleteAlert();
+        },
 
 
         async showRenameAlert() {
@@ -281,7 +313,8 @@ export default {
         save() {
             this.$storage.saveProtocolById(this.protocolId, this.protocol)
         },
-    }
+    },
+
     
 }
 </script>

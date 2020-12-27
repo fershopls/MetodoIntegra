@@ -5,7 +5,7 @@
                 <ion-back-button slot="start" default-href="/"></ion-back-button>
                 <ion-title>{{ pageTitle }}</ion-title>
                 <ion-buttons slot="end">
-                    <ion-button @click="openPopover">
+                    <ion-button @click="onSettingClicked">
                         <ion-icon slot="icon-only" src="/assets/ellipsis-vertical.svg" />
                     </ion-button>
                 </ion-buttons>
@@ -13,6 +13,7 @@
         </ion-header>
 
         <ion-content>
+            {{ onSettingClicked }}
             <slot />
         </ion-content>
     </ion-page>
@@ -20,8 +21,6 @@
 
 
 <script>
-import Popover from "./Popover"
-
 import { 
     IonPage,
     IonHeader,
@@ -32,13 +31,12 @@ import {
 
     IonButtons,
     IonButton,
-    IonIcon,
-    popoverController
+    IonIcon
 } from "@ionic/vue";
 
 
 export default {
-    props: ["pageTitle"],
+    props: ["pageTitle", "onSettingClicked"],
     components: {
         IonPage,
         IonHeader,
@@ -52,18 +50,5 @@ export default {
         IonButton,
         IonIcon,
     },
-
-    methods: {
-        async openPopover(ev) {
-            const popover = await popoverController
-                .create({
-                component: Popover,
-                cssClass: 'my-custom-class',
-                event: ev,
-                translucent: true
-                })
-            return popover.present();
-        },
-    }
 }
 </script>
