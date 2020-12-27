@@ -1,5 +1,5 @@
 <template>
-  <div id="welcome_screen" v-show="visible" ref="welcome_screen">
+  <div id="welcome_screen" v-show="visible" ref="welcomeScreen">
         <img src="/assets/logo.png" alt="" class="brand-img">
       
         <div class="brand-text">
@@ -60,25 +60,29 @@ export default {
 
     components: {
     },
-    mounted () {
-        document.onreadystatechange = () => { 
-            if (document.readyState == "complete") {
-                const animation = createAnimation()
-                .addElement(this.$refs.welcome_screen)
-                .duration(1350)
-                .fromTo('opacity', '1', '0');
-                animation.play().then(()=>{
-                    this.$refs.welcome_screen.style.display = "none"
-                })
-            } 
+    methods: {
+        show(){
+            this.visible = true
+            this.$refs.welcomeScreen.style.opacity = 1
+        },
+        hide(){
+            const animation = createAnimation()
+            .addElement(this.$refs.welcomeScreen)
+            .delay(350)
+            .duration(350)
+            .fromTo('opacity', '1', '0');
+            
+            animation.play().then(() => {
+                this.visible = false
+            })
         }
     },
 
     data() {
         return {
-            visible: true,
+            visible: false,
         }
-    }
+    },
 
 }
 

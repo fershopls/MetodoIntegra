@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <welcome-screen />
+        <welcome-screen ref="welcomeScreen" />
         <ion-header>
             <ion-toolbar color="primary">
                 <ion-title>{{ pageTitle }}</ion-title>
@@ -36,6 +36,17 @@ export default {
         IonToolbar,
         IonTitle,
         IonContent,
-    }
+    },
+
+    methods: {
+        showWelcomeScreen() {
+            return this.$refs.welcomeScreen.show()
+        },
+        hideWelcomeScreen() {
+            return this.$refs.welcomeScreen.hide()
+        },
+    },
+
+
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
 
-    <home-layout pageTitle="Mis Protocolos">
+    <home-layout pageTitle="Mis Protocolos" ref="homeLayout">
         <ion-list>
             <ion-item v-for="protocol in protocols.slice().reverse()" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
                 <ion-label>{{ protocol.name }}</ion-label>
@@ -50,16 +50,19 @@ export default {
     },
     mounted(){
         this.retriveAllProtocols()
+        this.$refs.homeLayout.showWelcomeScreen()
+        setTimeout(() => {
+            this.$refs.homeLayout.hideWelcomeScreen()
+        }, 580)
     },
     updated(){
         this.retriveAllProtocols()
     },
     methods: {
         async retriveAllProtocols() {
-            this.protocols = await this.$storage.getAllProtocols()
-            // .then((result) => {
-            //     this.protocols = result
-            // })
+            return this.$storage.getAllProtocols().then((result) => {
+                this.protocols = result
+            })
         },
 
         timeToDateText(time){
