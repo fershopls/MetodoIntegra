@@ -49,7 +49,6 @@
         
 
         <br>
-        <!-- <pre>{{ protocol }}</pre> -->
 
 
         <ion-button color="light" expand="full" @click="undoneAllBeliefs">
@@ -179,14 +178,42 @@ export default {
             this.isPopoverOpened = visible
         },
 
-        onPopoverItemClicked(e, itemKey) {
+        onPopoverItemClicked(itemKey) {
             this.isPopoverOpened = false
             if (itemKey == "export")
-                this.showExportAlert();
+                this.showExportModal();
             else if (itemKey == "rename")
                 this.showRenameAlert();
             else if (itemKey == "delete")
                 this.showDeleteAlert();
+            else if (itemKey == "developer")
+                this.showDeveloperModal()
+        },
+
+        async showDeveloperModal() {
+            this.exportedText = JSON.stringify(this.protocol, null, 4)
+            this.isExportModalOpened = true
+        },
+
+
+        async showExportModal() {
+            let protocol = this.protocol
+            
+            let string = ""
+            // Add name
+            string += protocol.name + "\n\n"
+            // Add description
+            if (protocol.description != "")
+            {
+                string += "=====\n"+protocol.description + "\n=====\n\n"
+            }
+            // Add beliefs
+            protocol.beliefs.forEach((b, i) => {
+                string += (i+1) + ". " +b.text+"\n"
+            })
+
+            this.exportedText = string
+            this.isExportModalOpened = true
         },
 
 
@@ -250,27 +277,6 @@ export default {
                     ],
                 });
             return alert.present();
-        },
-
-
-        async showExportAlert() {
-            let protocol = this.protocol
-            
-            let string = ""
-            // Add name
-            string += protocol.name + "\n\n"
-            // Add description
-            if (protocol.description != "")
-            {
-                string += "=====\n"+protocol.description + "\n=====\n\n"
-            }
-            // Add beliefs
-            protocol.beliefs.forEach((b, i) => {
-                string += (i+1) + ". " +b.text+"\n"
-            })
-
-            this.exportedText = string
-            this.isExportModalOpened = true
         },
 
         isFactorDone(index) {

@@ -14,8 +14,7 @@
         </ion-header>
 
         <ion-content class="ion-padding">
-            <p>Puedes copiar tu protocolo aquí:</p>
-            <ion-textarea ref="exportTextarea" @click="selectAllText" class="exportedText" :value="exportedString" rows="20"></ion-textarea>
+            <ion-textarea ref="exportTextarea" @click="selectAllText" class="exportedText" :value="exportedString" ></ion-textarea>
         </ion-content>
     </ion-page>
 </template>
@@ -25,6 +24,8 @@
 .exportedText
     background-color #fafafa
     border solid 1px #f1f1f1
+    &, *
+        height 100%
 </style>
 
 
