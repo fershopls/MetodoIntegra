@@ -15,8 +15,12 @@ const routes = [
     component: () => import("@/pages/CreateProtocol.vue")
   },
   {
-    path: '/slides',
+    path: '/welcome-screen',
     component: () => import("@/components/WelcomeScreen.vue")
+  },
+  {
+    path: '/modal',
+    component: () => import("@/pages/test/Modal.vue")
   },
   {
     path: '/test',
