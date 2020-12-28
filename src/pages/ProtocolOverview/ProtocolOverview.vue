@@ -38,10 +38,10 @@
 
         
         <ion-list>
-            <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="belief" lines="full">
+            <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="index" lines="full">
                 <ion-checkbox slot="start" v-model="belief.done"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief.text }}</ion-label>
-                <ion-button fill="clear" @click="deleteBelief(belief)">
+                <ion-button fill="clear" @click="showDeleteBeliefAlert(belief)">
                     <ion-icon src="/assets/trash.svg" />
                 </ion-button>
             </ion-item>
@@ -136,7 +136,7 @@ export default {
         IonPopover,
     },
 
-    mounted() {
+    async mounted() {
         this.$storage.getProtocolById(this.protocolId).then((result) => {
             if (result) {
                 this.protocol = result
@@ -239,6 +239,27 @@ export default {
         },
 
 
+        async showDeleteBeliefAlert(belief) {
+            const alert = await alertController
+                .create({
+                    header: 'Eliminar creencia?',
+                    buttons: [
+                        {
+                            text: 'Cancelar',
+                            role: 'cancel',
+                            cssClass: 'secondary',
+                        },
+                        {
+                            text: 'Delete',
+                            handler: () => {
+                                this.deleteBelief(belief)
+                            },
+                        },
+                    ],
+                });
+            return alert.present();
+        },
+
         async showRenameAlert() {
             const alert = await alertController
                 .create({
@@ -312,7 +333,6 @@ export default {
             } else {
                 this.protocol.factors[index] = 0
             }
-            // console.log(this.protocol.factors)
             this.save()
         },
 

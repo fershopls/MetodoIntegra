@@ -5,7 +5,6 @@ import router from './router';
 
 import { IonicVue } from '@ionic/vue';
 
-import BaseLayout from "@/components/Layout/BaseLayout.vue"
 import storage from "@/storage"
 
 
@@ -34,8 +33,6 @@ const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(storage);
-
-  app.component("base-layout", BaseLayout)
   
 router.isReady().then(() => {
   app.mount('#app');

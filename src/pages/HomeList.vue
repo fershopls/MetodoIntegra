@@ -21,7 +21,7 @@
 
 
 <script>
-
+const moment = require("moment");
 import HomeLayout from "@/components/Layout/HomeLayout.vue"
 
 
@@ -66,26 +66,8 @@ export default {
         },
 
         timeToDateText(time){
-            let date = new Date(time)
-            let months = [
-                "Ene",
-                "Feb",
-                "Mar",
-                "Abr",
-                "May",
-                "Jun",
-                "Jul",
-                "Ago",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dic",
-            ]
-            let day = date.getDay()
-            day = day < 10? "0"+day:day
-            let year = date.getFullYear()
-            return months[date.getMonth() - 1] + " " + day + " " + year
-        }
+            return moment(time).format("MMM DD YYYY")
+        },
     },
     data() {
         return {
