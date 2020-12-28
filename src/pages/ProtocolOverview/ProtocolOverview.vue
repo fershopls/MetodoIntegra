@@ -26,7 +26,7 @@
 
         <h2 style="text-align: center">Lista de Creencias</h2>
         
-
+        <!-- Belief form -->
         <ion-item>
             <ion-label position="floating">Escribe tu nueva creencia..</ion-label>
             <ion-input v-model="beliefText" @keyup.enter="onAddBeliefButton"></ion-input>
@@ -36,13 +36,18 @@
             Añadir
         </ion-button>
 
-        
+        <!-- Belief list -->
         <ion-list>
             <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="index" lines="full">
                 <ion-checkbox slot="start" v-model="belief[1]"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief[0] }}</ion-label>
+                <!-- Edit button -->
+                <ion-button fill="clear" @click="showEditBeliefAlert(belief)">
+                    <ion-icon :icon="pencilOutline" />
+                </ion-button>
+                <!-- Delete button -->
                 <ion-button fill="clear" @click="confirmDeleteBelief(belief)">
-                    <ion-icon src="/assets/trash.svg" />
+                    <ion-icon :icon="trashOutline" />
                 </ion-button>
             </ion-item>
         </ion-list>
@@ -102,7 +107,11 @@ import ModalBeliefImports from "./ModalBeliefImports/Modal"
 
 
 
-import { ellipsisVertical } from "ionicons/icons"
+import {
+    ellipsisVertical,
+    trashOutline,
+    pencilOutline,
+} from "ionicons/icons"
 
 
 import {
@@ -140,6 +149,14 @@ export default {
 
         IonModal,
         IonPopover,
+    },
+
+    setup(){
+        return {
+            ellipsisVertical,
+            trashOutline,
+            pencilOutline,
+        }
     },
 
     async mounted() {
@@ -257,6 +274,23 @@ export default {
             })
         },
 
+        
+        async showEditBeliefAlert(belief) {
+            const alert = await alertController.create({
+                header: "Cambiar creencia",
+                inputs: [
+                    { name: "beliefString", value: belief[0] }
+                ],
+                buttons: [
+                    { text: "Cancelar", role:"cancel", cssClass:"secondary" },
+                    { text: "Guardar", handler: (alertData) => {
+                        this.editBelief(belief, alertData.beliefString)
+                    } },
+                ]
+            })
+            return alert.present()
+        },
+
 
         async showRenameAlert() {
             const alert = await alertController
@@ -362,6 +396,14 @@ export default {
         },
 
 
+        editBelief(belief, newBeliefString) {
+            let beliefs = this.protocol.beliefs
+            let index = beliefs.indexOf(belief)
+            beliefs[index][0] = newBeliefString
+            // this.save()
+        },
+
+
         deleteBelief(belief) {
             this.protocol.beliefs.splice(this.protocol.beliefs.indexOf(belief), 1)
             this.save()
@@ -390,12 +432,6 @@ export default {
         },
     },
 
-
-    setup(){
-        return {
-            ellipsisVertical
-        }
-    },
 
 }
 </script>

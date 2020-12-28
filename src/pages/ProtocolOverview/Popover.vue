@@ -17,7 +17,7 @@
             <ion-icon :icon="bugOutline" slot="end" />
             Modo desarrollador</ion-item>
         
-        <ion-item lines="none" button @click="$emit('item-clicked', 'delete')" color="danger"    >
+        <ion-item lines="none" button @click="$emit('item-clicked', 'delete')" color="danger" >
             <ion-icon :icon="trashOutline" slot="end" />
             Eliminar Protocolo</ion-item>
 
