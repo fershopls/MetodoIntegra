@@ -6,13 +6,21 @@ import {
 export default {
     
     async show(options) {
+        options = Object.assign({
+            header: "Por Favor Confirma",
+            message: "",
+            cancelText: "Cancelar",
+            confirmText: "Confirmar",
+            handler: () => {},
+        }, options)
+
         const alert = await alertController
             .create({
                 header: options.header,
                 message: options.message,
                 buttons: [
                     {
-                        text: 'Cancelar',
+                        text: options.cancelText,
                         role: 'cancel',
                         cssClass: 'secondary',
                     },
