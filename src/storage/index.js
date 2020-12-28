@@ -62,7 +62,7 @@ export default {
                 return this.saveProtocols(protocols)
             },
 
-            saveProtocols(protocolsArray) {
+            async saveProtocols(protocolsArray) {
                 return Storage.set({
                     key: "protocols",
                     value: JSON.stringify(protocolsArray)

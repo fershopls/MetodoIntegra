@@ -194,6 +194,7 @@ export default {
             this.isPopoverOpened = visible
         },
 
+
         onPopoverItemClicked(itemKey) {
             this.isPopoverOpened = false
             if (itemKey == "export")
@@ -207,6 +208,7 @@ export default {
             else if (itemKey == "developer")
                 this.showDeveloperModal()
         },
+
 
         async showDeveloperModal() {
             this.exportedText = JSON.stringify(this.protocol, null, 4)
@@ -234,6 +236,7 @@ export default {
             this.isExportModalOpened = true
         },
 
+
         async showImportModal() {
             this.isImportModalOpened = true
         },
@@ -259,6 +262,7 @@ export default {
                 });
             return alert.present();
         },
+        
 
         async showRenameAlert() {
             const alert = await alertController
