@@ -1,19 +1,15 @@
 <template>
     <layout pageTitle="Opciones de Desarrollador">
-        
-        <div class="ion-padding">
-            <ion-textarea :value="protocolsToText" auto-grow="true" />
-        </div>
 
         <ion-content class="ion-padding">
-            <ion-textarea ref="exportTextarea" class="exportedText" :value="protocolsToText" ></ion-textarea>
+            <ion-textarea v-model="textToJSON" class="exportedText" ></ion-textarea>
         </ion-content>
         
         <template v-slot:footer>
             <ion-footer>
                 <ion-toolbar>
                     <ion-buttons>
-                        <ion-button color="primary" @click="selectAllText" style="width: 100%" >
+                        <ion-button color="primary" @click="saveProtocols" style="width: 100%" >
                             Guardar
                         </ion-button>
                     </ion-buttons>
@@ -23,6 +19,15 @@
 
     </layout>
 </template>
+
+
+<style lang="stylus">
+.exportedText
+    background-color #fafafa
+    border solid 1px #f1f1f1
+    &, *
+        height 100%
+</style>
 
 
 <script>
@@ -38,6 +43,13 @@ import {
     // IonLabel,
     // IonNote,
     IonTextarea,
+    
+    IonToolbar,
+    IonFooter,
+    IonButtons,
+    IonButton,
+    IonContent,
+
 
 } from "@ionic/vue"
 
@@ -55,6 +67,13 @@ export default {
         // IonLabel,
         // IonNote,
         IonTextarea,
+        
+        IonToolbar,
+        IonFooter,
+        IonButtons,
+        IonButton,
+        IonContent,
+
 
     },
     
@@ -73,21 +92,29 @@ export default {
         async retriveAllProtocols() {
             return this.$storage.getAllProtocols().then((result) => {
                 this.protocols = result
+                this.textToJSON = this.protocolsToText()
             })
         },
+
+
+        async saveProtocols() {
+            let jsonData = JSON.parse(this.textToJSON)
+            console.log(jsonData)
+        },
+
+        
+        protocolsToText(){
+            return JSON.stringify(this.protocols, null, "  ")
+        }
     },
 
 
     data() {
         return {
             protocols: [],
+            textToJSON: "",
         }
     },
 
-    computed: {
-        protocolsToText(){
-            return JSON.stringify(this.protocols, null, "  ")
-        }
-    }
 }
 </script>
