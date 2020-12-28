@@ -41,14 +41,11 @@
             <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="index" lines="full">
                 <ion-checkbox slot="start" v-model="belief[1]"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief[0] }}</ion-label>
-                <!-- Edit button -->
-                <ion-button fill="clear" @click="showEditBeliefAlert(belief)">
-                    <ion-icon :icon="pencilOutline" />
+                <!-- Manage button -->
+                <ion-button fill="clear" @click="showBeliefPopover(true, $event, belief)">
+                    <ion-icon :icon="ellipsisVerticalOutline" />
                 </ion-button>
-                <!-- Delete button -->
-                <ion-button fill="clear" @click="confirmDeleteBelief(belief)">
-                    <ion-icon :icon="trashOutline" />
-                </ion-button>
+                
             </ion-item>
         </ion-list>
         
@@ -65,6 +62,16 @@
 
         <br>
         
+
+        <!-- Belief popover -->
+        <ion-popover
+            :is-open="isBeliefPopoverOpened"
+            :event="beliefPopoverEvent"
+            :translucent="true"
+            @onDidDismiss="isBeliefPopoverOpened = false"
+            >
+            <BeliefPopover v-on:item-clicked="onPopoverItemClicked"></BeliefPopover>
+        </ion-popover>
 
         <!-- Menu popover -->
         <ion-popover
@@ -102,6 +109,7 @@
 import ConfirmAlert from "@/components/ConfirmAlert/ConfirmAlert.js"
 import Layout from "@/pages/ProtocolOverview/Layout.vue"
 import Popover from "@/pages/ProtocolOverview/Popover"
+import BeliefPopover from "./BeliefPopover/BeliefPopover"
 import ModalExportText from "@/components/ExportTextModal/Modal"
 import ModalBeliefImports from "./ModalBeliefImports/Modal"
 
@@ -109,6 +117,7 @@ import ModalBeliefImports from "./ModalBeliefImports/Modal"
 
 import {
     ellipsisVertical,
+    ellipsisVerticalOutline,
     trashOutline,
     pencilOutline,
 } from "ionicons/icons"
@@ -136,6 +145,7 @@ export default {
         Popover,
         ModalExportText,
         ModalBeliefImports,
+        BeliefPopover,
 
 
         IonButton,
@@ -154,6 +164,7 @@ export default {
     setup(){
         return {
             ellipsisVertical,
+            ellipsisVerticalOutline,
             trashOutline,
             pencilOutline,
         }
@@ -178,6 +189,9 @@ export default {
     data() {
         return {
             isPopoverOpened: false,
+            
+            isBeliefPopoverOpened: false,
+            beliefPopoverEvent: null,
             
             isImportModalOpened: false,
 
@@ -215,6 +229,11 @@ export default {
 
         showPopover(visible = true) {
             this.isPopoverOpened = visible
+        },
+
+        showBeliefPopover(visible = true, event) {
+            this.isBeliefPopoverOpened = visible
+            this.beliefPopoverEvent = event
         },
 
 
