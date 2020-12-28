@@ -1,16 +1,13 @@
 <template>
     <ion-list>
 
-        <ion-item button @click="$emit('item-clicked', 'export')" >
+        <ion-item button @click="$emit('item-clicked', 'edit')" >
             <ion-icon :icon="pencilOutline" slot="end" />
             Editar</ion-item>
 
-        <ion-item button @click="$emit('item-clicked', 'export')" lines="none">
+        <ion-item button @click="$emit('item-clicked', 'delete')" lines="none">
             <ion-icon :icon="trashOutline" slot="end" />
             Eliminar</ion-item>
-        
-        <!-- showEditBeliefAlert(belief) -->
-        <!-- confirmDeleteBelief(belief) -->
         
         <!-- <ion-item lines="none" detail="false" button>Cerrar</ion-item> -->
     </ion-list>

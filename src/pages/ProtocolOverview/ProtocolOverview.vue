@@ -70,7 +70,7 @@
             :translucent="true"
             @onDidDismiss="isBeliefPopoverOpened = false"
             >
-            <BeliefPopover v-on:item-clicked="onPopoverItemClicked"></BeliefPopover>
+            <BeliefPopover v-on:item-clicked="onBeliefPopoverItemClicked"></BeliefPopover>
         </ion-popover>
 
         <!-- Menu popover -->
@@ -192,6 +192,7 @@ export default {
             
             isBeliefPopoverOpened: false,
             beliefPopoverEvent: null,
+            beliefPopoverSelectedBelief: null,
             
             isImportModalOpened: false,
 
@@ -231,9 +232,19 @@ export default {
             this.isPopoverOpened = visible
         },
 
-        showBeliefPopover(visible = true, event) {
+        showBeliefPopover(visible = true, event, selectedBelief) {
             this.isBeliefPopoverOpened = visible
             this.beliefPopoverEvent = event
+            this.beliefPopoverSelectedBelief = selectedBelief
+        },
+
+
+        onBeliefPopoverItemClicked(itemKey) {
+            this.isBeliefPopoverOpened = false
+            if (itemKey == "edit")
+                this.showEditBeliefAlert(this.beliefPopoverSelectedBelief)
+            else if (itemKey == "delete")
+                this.confirmDeleteBelief(this.beliefPopoverSelectedBelief)
         },
 
 
