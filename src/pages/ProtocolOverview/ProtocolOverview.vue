@@ -51,10 +51,14 @@
         <br>
 
 
-        <ion-button color="light" expand="full" @click="undoneAllBeliefs">
-            <ion-icon src="/assets/refresh.svg" />
-            Regrabar creencias
-        </ion-button>
+        <div style="text-align: center;">
+            <ion-button color="light" @click="undoneAllBeliefs">
+                <ion-icon src="/assets/refresh.svg" />
+                Regrabar creencias
+            </ion-button>
+        </div>
+
+        <br>
         
 
         <!-- Menu popover -->
@@ -262,7 +266,7 @@ export default {
                 });
             return alert.present();
         },
-        
+
 
         async showRenameAlert() {
             const alert = await alertController
@@ -369,7 +373,7 @@ export default {
 
         undoneAllBeliefs() {
             this.protocol.beliefs.forEach((belief) => {
-                belief.done = false
+                belief[1] = false
             })
         },
 
