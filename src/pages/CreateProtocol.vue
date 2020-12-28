@@ -1,40 +1,64 @@
 <template>
-    <base-layout pageTitle="Crear un Protocolo">
-        
-        
-        <ion-item>
-            <ion-label position="floating">Escribe el nombre del protocolo..</ion-label>
-            <ion-input v-model="protocolName" @keyup.enter="createProtocol"></ion-input>
-        </ion-item>
-        
-        
-        <ion-button color="primary" expand="full" @click="createProtocol">
-            Añadir
-        </ion-button>
 
+    <ion-page>
+        <ion-toolbar>
+            <ion-back-button slot="end" :icon="close" default-href="/"></ion-back-button>
+        </ion-toolbar>
 
-    </base-layout>
+        <ion-content class="ion-padding">
+            <ion-item>
+                <!-- <ion-label position="floating">Escribe el nombre del protocolo..</ion-label> -->
+                <ion-input v-model="protocolName" placeholder="Escribe el nombre del protocolo..." @keyup.enter="createProtocol"></ion-input>
+            </ion-item>
+            
+            <br>
+            
+            <ion-button color="primary" expand="full" @click="createProtocol">
+                Añadir Protocolo
+            </ion-button>
+        </ion-content>
+    </ion-page>
+
 </template>
 
 <script>
-import BaseLayout from "@/components/Layout/BaseLayout.vue"
-
 import {
+    IonContent,
+
+    IonToolbar,
+    IonBackButton,
+    IonPage,
+
     IonItem,
     IonButton,
-    IonLabel,
+    // IonLabel,
     IonInput,
 } from "@ionic/vue"
 
+
+import {
+    close
+}
+from "ionicons/icons"
+
 export default {
     components: {
-        BaseLayout,
 
+        IonContent,
+
+        IonToolbar,
+        IonBackButton,
+        IonPage,
 
         IonItem,
         IonButton,
-        IonLabel,
+        // IonLabel,
         IonInput,
+    },
+    setup() {
+        return {
+            close,
+        }
     },
     data(){
         return {
@@ -43,6 +67,8 @@ export default {
     },
     methods: {
         createProtocol() {
+            if (this.protocolName == "") return;
+
             this.$storage.create(this.protocolName).then(() => {
                 this.$router.replace('/');
             })
