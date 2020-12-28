@@ -29,18 +29,18 @@
 
         <ion-item>
             <ion-label position="floating">Escribe tu nueva creencia..</ion-label>
-            <ion-input v-model="beliefText" @keyup.enter="addBelief"></ion-input>
+            <ion-input v-model="beliefText" @keyup.enter="onAddBeliefButton"></ion-input>
         </ion-item>
         
-        <ion-button color="primary" expand="full" @click="addBelief">
+        <ion-button color="primary" expand="full" @click="onAddBeliefButton">
             Añadir
         </ion-button>
 
         
         <ion-list>
             <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="index" lines="full">
-                <ion-checkbox slot="start" v-model="belief.done"/>
-                <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief.text }}</ion-label>
+                <ion-checkbox slot="start" v-model="belief[1]"/>
+                <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief[0] }}</ion-label>
                 <ion-button fill="clear" @click="showDeleteBeliefAlert(belief)">
                     <ion-icon src="/assets/trash.svg" />
                 </ion-button>
@@ -227,7 +227,7 @@ export default {
             }
             // Add beliefs
             protocol.beliefs.forEach((b, i) => {
-                string += (i+1) + ". " +b.text+"\n"
+                string += (i+1) + ". " +b[0]+"\n"
             })
 
             this.exportedText = string
@@ -338,21 +338,19 @@ export default {
 
         async importArrayOfBeliefs(beliefs) {
             beliefs.forEach((belief) => {
-                this.beliefText = belief
-                this.addBelief()
+                this.addBeliefByString(belief)
             })
         },
 
         async addBeliefByString(beliefString) {
             if (beliefString == "") return;
-            this.protocol.beliefs.push({
-                text: beliefString,
-                done: false,
-            })
+            this.protocol.beliefs.push(
+                [beliefString, false]
+            )
             this.save()
         },
 
-        async addBelief() {
+        async onAddBeliefButton() {
             if (this.beliefText == "") return;
 
             this.addBeliefByString(this.beliefText)
