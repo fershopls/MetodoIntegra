@@ -14,8 +14,18 @@
         </ion-header>
 
         <ion-content class="ion-padding">
-            <ion-textarea ref="exportTextarea" @click="selectAllText" class="exportedText" :value="exportedString" ></ion-textarea>
+            <ion-textarea ref="exportTextarea" class="exportedText" :value="exportedString" ></ion-textarea>
         </ion-content>
+
+         <ion-footer>
+            <ion-toolbar>
+                <ion-buttons>
+                    <ion-button color="primary" @click="selectAllText" style="margin: auto">
+                        Click aquí para Seleccionar Todo
+                    </ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-footer>
     </ion-page>
 </template>
 
@@ -39,6 +49,8 @@ import {
     IonTitle,
     IonContent,
     IonTextarea,
+
+    IonFooter,
     
 
     IonButtons,
@@ -58,6 +70,8 @@ export default {
         
         
         IonTextarea,
+
+        IonFooter,
         IonButtons,
         IonButton,
         IonIcon,
