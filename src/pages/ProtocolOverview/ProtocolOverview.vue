@@ -41,7 +41,7 @@
             <ion-item v-for="(belief, index) in protocol.beliefs.slice().reverse()" v-bind:key="index" lines="full">
                 <ion-checkbox slot="start" v-model="belief[1]"/>
                 <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief[0] }}</ion-label>
-                <ion-button fill="clear" @click="showDeleteBeliefAlert(belief)">
+                <ion-button fill="clear" @click="confirmDeleteBelief(belief)">
                     <ion-icon src="/assets/trash.svg" />
                 </ion-button>
             </ion-item>
@@ -52,7 +52,7 @@
 
 
         <div style="text-align: center;">
-            <ion-button color="light" @click="undoneAllBeliefs">
+            <ion-button color="light" @click="confirmUncheckAllBeliefs">
                 <ion-icon src="/assets/refresh.svg" />
                 Regrabar creencias
             </ion-button>
@@ -94,10 +94,12 @@
 </template>
 
 <script>
+import ConfirmAlert from "@/components/ConfirmAlert/ConfirmAlert.js"
 import Layout from "@/pages/ProtocolOverview/Layout.vue"
 import Popover from "@/pages/ProtocolOverview/Popover"
 import ModalExportText from "@/components/ExportTextModal/Modal"
 import ModalBeliefImports from "./ModalBeliefImports/Modal"
+
 
 
 import { ellipsisVertical } from "ionicons/icons"
@@ -246,25 +248,13 @@ export default {
         },
 
 
-        async showDeleteBeliefAlert(belief) {
-            const alert = await alertController
-                .create({
-                    header: 'Eliminar creencia?',
-                    buttons: [
-                        {
-                            text: 'Cancelar',
-                            role: 'cancel',
-                            cssClass: 'secondary',
-                        },
-                        {
-                            text: 'Delete',
-                            handler: () => {
-                                this.deleteBelief(belief)
-                            },
-                        },
-                    ],
-                });
-            return alert.present();
+        async confirmDeleteBelief(belief) {
+            return ConfirmAlert.show({
+                header: 'Eliminar creencia?',
+                message: 'Esta acción no se puede deshacer.',
+                confirmText: 'Eliminar',
+                handler: () => this.deleteBelief(belief),
+            })
         },
 
 
@@ -330,10 +320,12 @@ export default {
             return alert.present();
         },
 
+
         isFactorDone(index) {
             return Object.prototype.hasOwnProperty.call(this.protocol.factors, index) && this.protocol.factors[index] == 1
         },
         
+
         onFactorChanged(e, index) {
             if (e.target.checked == true)
             {
@@ -344,11 +336,13 @@ export default {
             this.save()
         },
 
+
         async importArrayOfBeliefs(beliefs) {
             beliefs.forEach((belief) => {
                 this.addBeliefByString(belief)
             })
         },
+
 
         async addBeliefByString(beliefString) {
             if (beliefString == "") return;
@@ -358,6 +352,7 @@ export default {
             this.save()
         },
 
+
         async onAddBeliefButton() {
             if (this.beliefText == "") return;
 
@@ -366,16 +361,29 @@ export default {
             this.beliefText = ""
         },
 
+
         deleteBelief(belief) {
             this.protocol.beliefs.splice(this.protocol.beliefs.indexOf(belief), 1)
             this.save()
         },
 
-        undoneAllBeliefs() {
+
+        confirmUncheckAllBeliefs() {
+            return ConfirmAlert.show({
+                header: 'Regrabar creencias?',
+                message: 'Esta acción marcará todas las creencias como no-grabadas, útil a la hora de regrabar creencias.',
+                confirmText: 'Proceder',
+                handler: this.uncheckAllBeliefs,
+            })
+        },
+
+
+        uncheckAllBeliefs() {
             this.protocol.beliefs.forEach((belief) => {
                 belief[1] = false
             })
         },
+
 
         save() {
             this.$storage.saveProtocolById(this.protocolId, this.protocol)

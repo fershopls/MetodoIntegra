@@ -32,7 +32,7 @@
 
 <script>
 import Layout from "@/pages/Home/Layout"
-import confirmAlert from "@/components/ConfirmAlert/ConfirmAlert.js"
+import ConfirmAlert from "@/components/ConfirmAlert/ConfirmAlert.js"
 
 
 import {
@@ -106,7 +106,7 @@ export default {
 
         
         async showSaveConfirmAlert() {
-            return confirmAlert.show({
+            return ConfirmAlert.show({
                 header: 'Guardar datos?',
                 message: '<strong>CUIDADO!</strong> Esta acción no puede deshacerse, cualquier modificación en los datos de la app podría hacer que dejara de funcionar.',
                 handler: this.saveProtocols,
