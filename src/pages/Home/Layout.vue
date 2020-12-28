@@ -13,6 +13,7 @@
         <ion-content id="content">
             <slot />
         </ion-content>
+        <slot name="footer" />
     </ion-page>
 </template>
 

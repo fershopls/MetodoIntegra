@@ -5,6 +5,21 @@
             <ion-textarea :value="protocolsToText" auto-grow="true" />
         </div>
 
+        <ion-content class="ion-padding">
+            <ion-textarea ref="exportTextarea" class="exportedText" :value="protocolsToText" ></ion-textarea>
+        </ion-content>
+        
+        <template v-slot:footer>
+            <ion-footer>
+                <ion-toolbar>
+                    <ion-buttons>
+                        <ion-button color="primary" @click="selectAllText" style="width: 100%" >
+                            Guardar
+                        </ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-footer>
+        </template>
 
     </layout>
 </template>
