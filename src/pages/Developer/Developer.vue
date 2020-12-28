@@ -1,10 +1,9 @@
 <template>
     <layout pageTitle="Opciones de Desarrollador">
         
-        
-        <pre>
-            {{ protocols }}
-        </pre>
+        <div class="ion-padding">
+            <ion-textarea :value="protocolsToText" auto-grow="true" />
+        </div>
 
 
     </layout>
@@ -15,7 +14,7 @@
 import Layout from "@/pages/Home/Layout"
 
 
-// import {
+import {
     // IonList,
     // IonItem,
     // IonFab,
@@ -23,8 +22,9 @@ import Layout from "@/pages/Home/Layout"
     // IonIcon,
     // IonLabel,
     // IonNote,
+    IonTextarea,
 
-// } from "@ionic/vue"
+} from "@ionic/vue"
 
 
 export default {
@@ -39,6 +39,7 @@ export default {
         // IonIcon,
         // IonLabel,
         // IonNote,
+        IonTextarea,
 
     },
     
@@ -67,6 +68,11 @@ export default {
             protocols: [],
         }
     },
-    
+
+    computed: {
+        protocolsToText(){
+            return JSON.stringify(this.protocols, null, "  ")
+        }
+    }
 }
 </script>
