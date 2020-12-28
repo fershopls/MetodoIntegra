@@ -32,6 +32,7 @@
 
 <script>
 import Layout from "@/pages/Home/Layout"
+import confirmAlert from "@/components/ConfirmAlert/ConfirmAlert.js"
 
 
 import {
@@ -50,8 +51,6 @@ import {
     IonButton,
     IonContent,
 
-
-    alertController
 
 
 } from "@ionic/vue"
@@ -107,25 +106,12 @@ export default {
 
         
         async showSaveConfirmAlert() {
-            const alert = await alertController
-                .create({
-                    header: 'Guardar datos?',
-                    message: '<strong>CUIDADO!</strong> Esta acción no puede deshacerse, cualquier modificación en los datos de la app podría hacer que dejara de funcionar.',
-                    buttons: [
-                        {
-                            text: 'Cancelar',
-                            role: 'cancel',
-                            cssClass: 'secondary',
-                        },
-                        {
-                            text: 'Guardar',
-                            handler: () => {
-                                this.saveProtocols()
-                            },
-                        },
-                    ],
-                });
-            return alert.present();
+            return confirmAlert.show({
+                header: 'Guardar datos?',
+                message: '<strong>CUIDADO!</strong> Esta acción no puede deshacerse, cualquier modificación en los datos de la app podría hacer que dejara de funcionar.',
+                handler: this.saveProtocols,
+                confirmText: "Guardar",
+            })
         },
 
         
