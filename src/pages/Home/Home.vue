@@ -1,6 +1,5 @@
 <template>
-
-    <home-layout pageTitle="Mis Protocolos" ref="homeLayout">
+    <layout pageTitle="Mis Protocolos" ref="homeLayout">
         <ion-list>
             <ion-item v-for="protocol in protocols.slice().reverse()" button :router-link="'/protocol/'+protocol.id" v-bind:key="protocol.id">
                 <ion-label>{{ protocol.name }}</ion-label>
@@ -16,13 +15,13 @@
             </ion-fab-button>
         </ion-fab>
 
-    </home-layout>
+    </layout>
 </template>
 
 
 <script>
 const moment = require("moment");
-import HomeLayout from "@/components/Layout/HomeLayout.vue"
+import Layout from "./Layout.vue"
 
 
 import {
@@ -33,11 +32,13 @@ import {
     IonIcon,
     IonLabel,
     IonNote,
+
 } from "@ionic/vue"
+
 
 export default {
     components: {
-        HomeLayout,
+        Layout,
 
 
         IonList,
@@ -47,6 +48,8 @@ export default {
         IonIcon,
         IonLabel,
         IonNote,
+
+
     },
     mounted(){
         this.retriveAllProtocols()

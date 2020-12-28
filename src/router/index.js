@@ -4,7 +4,11 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 const routes = [
   {
     path: '/',
-    component: () => import("@/pages/HomeList.vue")
+    component: () => import("@/pages/Home/Home.vue")
+  },
+  {
+    path: '/developer',
+    component: () => import("@/pages/Developer/Developer.vue")
   },
   {
     path: '/protocol/:id',
