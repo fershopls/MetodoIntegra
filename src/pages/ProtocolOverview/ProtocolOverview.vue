@@ -317,7 +317,6 @@ export default {
         },
 
         async importArrayOfBeliefs(beliefs) {
-            console.log("Importing ", beliefs)
             beliefs.forEach((belief) => {
                 this.beliefText = belief
                 this.addBelief()
