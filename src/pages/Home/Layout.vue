@@ -5,10 +5,7 @@
         <ion-header>
             <ion-toolbar color="primary">
                 <ion-buttons slot="start">
-                    <ion-menu-button menu="main"/>
-                    <!-- <ion-button @click="openMenu" slot="icon-only">
-                        <ion-icon :icon="menu"></ion-icon>
-                    </ion-button> -->
+                    <ion-menu-button menu="main" auto-hide="false"/>
                 </ion-buttons>
                 <ion-title>{{ pageTitle }}</ion-title>
             </ion-toolbar>

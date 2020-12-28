@@ -14,7 +14,7 @@
         </ion-item>
 
 
-        <ion-item button @click="$router.replace('/')">
+        <ion-item button @click="$router.replace('/developer')">
             <ion-label>Opciones de Desarrollador</ion-label>
             <ion-icon :icon="codeOutline" slot="end" />
         </ion-item>
