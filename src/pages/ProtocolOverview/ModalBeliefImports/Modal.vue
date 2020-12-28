@@ -64,6 +64,7 @@ import {
     IonTextarea,
 
     IonItem,
+    IonLabel,
     IonList,
 
     IonGrid,
@@ -88,6 +89,7 @@ export default {
 
         
         IonItem,
+        IonLabel,
         IonList,
 
         IonGrid,
