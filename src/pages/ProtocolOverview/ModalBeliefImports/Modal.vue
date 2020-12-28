@@ -22,7 +22,7 @@
                 <h2>Confirma la Importación</h2>
                 <ion-list>
                     <ion-item v-for="(belief, index) in beliefs" v-bind:key="belief">
-                        {{ index + 1}}. {{ belief }}
+                        <ion-label class="ion-text-wrap">{{ index + 1}}. {{ belief }}</ion-label>
                     </ion-item>
                 </ion-list>
 
